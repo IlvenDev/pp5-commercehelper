@@ -1,0 +1,38 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+log:
+  level: DEBUG
+api:
+  dashboard: true
+  insecure: true
+entryPoints:
+  web:
+    address: :80
+  websecure:
+    address: :443
+  api:
+    address: :8888
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+  file:
+    filename: /etc/traefik/traefik.yaml
+
+http:
+  middlewares:
+    frontend-header:
+      headers:
+        customRequestHeaders:
+          X-Script-Name: "backend"
+        accessControlAllowMethods:
+          - GET
+          - OPTIONS
+          - PUT
+          - POST
+        accessControlAllowHeaders: "*"
+        accessControlAllowOriginList:
+          - http://commercemanager.localhost
+        accessControlMaxAge: 100
+        addVaryHeader: true

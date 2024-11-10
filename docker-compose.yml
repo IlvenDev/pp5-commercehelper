@@ -1,0 +1,74 @@
+services:
+  frontend:
+    image: ilvendev/mysite-frontend
+    deploy:
+      mode: replicated
+      replicas: 2
+      endpoint_mode: dnsrr
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    networks:
+      - my-network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend-http.rule=Host(`commercemanager.localhost`)
+      - traefik.http.routers.frontend-http.entrypoints=web
+      - traefik.http.routers.frontend-http.middlewares=frontend-header@file
+
+  backend:
+    image: ilvendev/mysite-backend
+    container_name: mysite-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/ItRProjectDB
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootpassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: true
+    networks:
+      - my-network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend-http.rule=Host(`backend.localhost`)
+      - traefik.http.routers.backend-http.entrypoints=web
+      - traefik.http.routers.backend-http.middlewares=frontend-header@file
+
+  db:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ItRProjectDB
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootpassword
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - my-network
+
+      # Zrobić dev configuracje żeby nie udostępniać bazy danych
+
+  reverse-proxy:
+    image: traefik:v3.2
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock 
+      - ./traefik.yaml:/etc/traefik/traefik.yaml:ro
+    networks:
+      - my-network 
+
+volumes:
+  db_data:
+
+networks:
+  my-network:
+    external: false
