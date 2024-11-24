@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { OrdersService } from '../../services/order/orders.service';
 import { Order } from '../../../types';
 
@@ -8,18 +8,15 @@ import { Order } from '../../../types';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './order-list.component.html',
-  styleUrl: './order-list.component.scss'
+  styleUrl: './order-list.component.scss',
 })
-export class OrderListComponent {
-  constructor(
-    private orderService: OrdersService
-  ) {}
+export class OrderListComponent implements OnInit {
+  constructor(private orderService: OrdersService) {}
 
   orders: Order[] = [];
   ngOnInit() {
     this.orderService.getAllOrders().subscribe((orders) => {
       this.orders = orders;
-    })
+    });
   }
-
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ProductComponent } from "../product/product.component";
+import { ProductComponent } from '../product/product.component';
 import { CommonModule } from '@angular/common';
 import { FormsService } from '../../services/form/forms.service';
 
@@ -8,11 +8,8 @@ import { FormsService } from '../../services/form/forms.service';
   standalone: true,
   imports: [ProductComponent, CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-
-  constructor(
-    private formsService: FormsService
-  ) {}
+  constructor(private formsService: FormsService) {}
 }

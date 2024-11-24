@@ -1,3 +1,8 @@
+#Networking in docker
+#Environment variables in java
+#Java containerization
+#DB healthcheck
+
 services:
   frontend:
     image: ilvendev/mysite-frontend
@@ -6,7 +11,7 @@ services:
       replicas: 2
       endpoint_mode: dnsrr
     build:
-      context: ./frontend
+      context: ./frontendcp
       dockerfile: Dockerfile
     depends_on:
       - backend
@@ -26,12 +31,15 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - db
+      # db:
+      #   condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/ItRProjectDB
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: rootpassword
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_USERNAME: &DB_USER ${MYSQL_USER:?missing MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: &DB_PASSWORD ${MYSQL_PASSWORD:?missing MYSQL_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_SHOW_SQL: true
+      SPRING_H2_CONSOLE_ENABLED: false
     networks:
       - my-network
     labels:
@@ -43,16 +51,21 @@ services:
   db:
     image: mariadb:latest
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: ItRProjectDB
-      MYSQL_USER: root
-      MYSQL_PASSWORD: rootpassword
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
     networks:
       - my-network
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+    #   start_period: 30s
 
-      # Zrobić dev configuracje żeby nie udostępniać bazy danych
 
   reverse-proxy:
     image: traefik:v3.2

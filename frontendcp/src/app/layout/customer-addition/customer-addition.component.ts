@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { CustomerService } from '../../services/customer/customers.service';
 import { FormsService } from '../../services/form/forms.service';
 
@@ -9,14 +14,14 @@ import { FormsService } from '../../services/form/forms.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './customer-addition.component.html',
-  styleUrl: './customer-addition.component.scss'
+  styleUrl: './customer-addition.component.scss',
 })
 export class CustomerAdditionComponent {
   customerForm: FormGroup;
 
   constructor(
     private customerService: CustomerService,
-    private formsService: FormsService
+    private formsService: FormsService,
   ) {
     this.customerForm = new FormGroup({
       firstName: new FormControl('', Validators.required),
@@ -28,15 +33,14 @@ export class CustomerAdditionComponent {
       state: new FormControl(''),
       zip: new FormControl(''),
       country: new FormControl(''),
-      birthDate: new FormControl(null, Validators.required)
+      birthDate: new FormControl(null, Validators.required),
     });
   }
 
   onSubmit() {
     this.customerService.createCustomer(this.customerForm.value).subscribe();
     this.customerForm.disable();
-    
-    this.formsService.addFormData("customerForm", this.customerForm.value);
+
+    this.formsService.addFormData('customerForm', this.customerForm.value);
   }
-  
 }

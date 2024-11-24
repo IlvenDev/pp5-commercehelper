@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './customer.component.html',
-  styleUrl: './customer.component.scss'
+  styleUrl: './customer.component.scss',
 })
 export class CustomerComponent {
   @Input() customer!: Customer;

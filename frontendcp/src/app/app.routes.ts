@@ -8,33 +8,32 @@ import { CustomerListComponent } from './layout/customer-list/customer-list.comp
 import { CustomerAdditionComponent } from './layout/customer-addition/customer-addition.component';
 
 export const routes: Routes = [
-    {
-        path: '',
-        component: HomeComponent,
-    },
-    {
-        path: 'products',
-        component: ProductListComponent
-    },
-    {
-        path: 'products/add-product',
-        component: ProductAdditionComponent,
-    },
-    {
-        path: 'customers',
-        component: CustomerListComponent,
-    },
-    {
-        path: 'customers/add-customer',
-        component: CustomerAdditionComponent
-    },
-    {
-        path: 'orders',
-        component: OrderListComponent,
-    },
-    {
-        path: 'orders/add-order',
-        component: OrderAdditionComponent,
-    }
-    
+  {
+    path: '',
+    component: HomeComponent,
+  },
+  {
+    path: 'products',
+    component: ProductListComponent,
+  },
+  {
+    path: 'products/add-product',
+    component: ProductAdditionComponent,
+  },
+  {
+    path: 'customers',
+    component: CustomerListComponent,
+  },
+  {
+    path: 'customers/add-customer',
+    component: CustomerAdditionComponent,
+  },
+  {
+    path: 'orders',
+    component: OrderListComponent,
+  },
+  {
+    path: 'orders/add-order',
+    component: OrderAdditionComponent,
+  },
 ];
