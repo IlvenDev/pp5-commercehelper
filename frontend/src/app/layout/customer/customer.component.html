@@ -1,0 +1,13 @@
+<div class="card text-bg-light mb-3" style="width: 40rem; height: 17rem;" role="region">
+  <div class="card-header">
+      <h2 class="customer-name">
+          {{customer.id}} | {{customer.firstName}} {{customer.lastName}}
+      </h2>
+  </div>
+  <div class="card-body">
+      <p class="card-text"><strong>Email:</strong> {{customer.email}}</p>
+      <p class="card-text"><strong>Phone:</strong> {{customer.phone}}</p>
+      <p class="card-text"><strong>Address:</strong> {{customer.address}} - {{customer.city}}, {{customer.state}} | {{customer.zip}} | {{customer.country}}</p>
+      <p class="card-text"><strong>Date of birth:</strong> {{customer.birthDate | date:'MMMM d, y'}}</p>
+  </div>
+</div>

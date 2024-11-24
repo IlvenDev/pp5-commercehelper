@@ -1,0 +1,19 @@
+$primary: #434354;
+$secondary: #d2d2d9;
+$body-color: blue;
+$input-placeholder-color: $primary;
+$input-color: $primary;
+//$input-bg: $primary;
+@import 'bootstrap/scss/bootstrap';
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+app-root {
+    display: flex;
+    flex-direction: column;
+}
