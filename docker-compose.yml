@@ -1,7 +1,11 @@
 #Networking in docker
 #Environment variables in java
 #Java containerization
-#DB healthcheck
+#seaweedfs
+#minio
+#Basically wypierdol frontend bo to tylko pliki statyczne i nie musisz tego tak naprawdę mieć
+#Zamiast tego ogarnąć backend
+#Also, wypierdol API na to samo co front bo wtedy nie powinno być zjebanego corsa "commercemanager.localhost/api"
 
 services:
   frontend:
@@ -30,9 +34,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     depends_on:
-      - db
-      # db:
-      #   condition: service_healthy
+      db:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/${MYSQL_DATABASE}
       SPRING_DATASOURCE_USERNAME: &DB_USER ${MYSQL_USER:?missing MYSQL_USER}
@@ -50,23 +53,16 @@ services:
 
   db:
     image: mariadb:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
     networks:
       - my-network
-    # healthcheck:
-    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
-    #   start_period: 30s
-
-
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
   reverse-proxy:
     image: traefik:v3.2
     ports:
